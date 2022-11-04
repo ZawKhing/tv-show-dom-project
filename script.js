@@ -7,7 +7,7 @@ function setup() {
   // makePageForEpisodes(allEpisodes);
   allEpisodes = getAllEpisodes();
   showAllEpisodes(allEpisodes);
-  searchEpisode(allEpisodes);
+  //searchEpisode(allEpisodes);
 }
 window.onload = setup;
 
@@ -40,22 +40,27 @@ function showAllEpisodes(episodes){
 }
 
 
-function searchEpisode(episodes){
-  const search = document.getElementById("search");
+
+const search = document.getElementById("search");
   
   //console.log(search)
  
   search.addEventListener('keyup', e => {
   const value = e.target.value;
-  allEpisodes.filter((episode)=>{
+  const matchingEpisodes = allEpisodes.filter((episode)=>{
        const isVisible = episode.name.includes(value) || episode.summary.includes(value)
+       return isVisible;
        //episode.element.classList.toggle("hide",!isVisible)
-   })
- })
-
-  //divElem.appendChild(search);
+     })
+     showAllEpisodes(matchingEpisodes);
+  })
+// function searchEpisode(episodes){
   
-}
+//  })
+
+//   //divElem.appendChild(search);
+  
+// }
 
 // for(let episode of episodes){
   //    search.textContent = `${episode.name}`
