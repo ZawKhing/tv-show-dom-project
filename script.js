@@ -6,7 +6,8 @@ const matchEpisodes = document.getElementById("matching-ep")
 const allEpisodes =  getAllEpisodes();
 
 function setup() {
-     showAllEpisodes(allEpisodes);
+    showAllEpisodes(allEpisodes);
+    populateSelectEpisode(allEpisodes)
 }
 
 // function makePageForEpisodes(episodeList) {
@@ -23,7 +24,7 @@ function showAllEpisodes(episodes){
     const article = document.createElement("Article");
   
     const title = document.createElement("h2");
-    const formattedEpNumber = ((episode.number.toString()).padStart(2,"0"))// format number to two characters string
+    let formattedEpNumber = ((episode.number.toString()).padStart(2,"0"))// format number to two characters string
     title.textContent = `${episode.name} - S0${episode.season}E${formattedEpNumber}`;
     article.appendChild(title);
     
@@ -49,4 +50,25 @@ search.addEventListener('keyup', e => {
   showAllEpisodes(matchingEpisodes);
 })
 
+
+function populateSelectEpisode(episodes){
+ const select = document.getElementById("episode-list");
+
+ for(let episode of episodes){
+  const option = document.createElement("option");
+  option.setAttribute("value",episode.id);
+  let formattedEpNumber = ((episode.number.toString()).padStart(2,"0"))// format number to two characters string
+  option.innerText = `S0${episode.season}E${formattedEpNumber} - ${episode.name}`;
+  
+  select.appendChild(option);
+ }
+}
+
+// select.addEventListener('keyup', e=>{
+//   const selectEpisode = e.target.value;
+//   const selectEp = allEpisodes.filter((episode)=>{
+//         return episode.name;
+//   })
+//   showAllEpisodes(selectEp)
+// })
 window.onload = setup;
