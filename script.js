@@ -3,7 +3,7 @@ const search = document.getElementById("search");
 const totalEpisodes = document.getElementById("total-episodes");
 const matchEpisodes = document.getElementById("matching-ep")
 
-let allEpisodes =  getAllEpisodes();
+const allEpisodes =  getAllEpisodes();
 
 function setup() {
      showAllEpisodes(allEpisodes);
@@ -17,7 +17,7 @@ function setup() {
 function showAllEpisodes(episodes){
   const container = document.querySelector(".container");
   container.innerHTML = "";
-  totalEpisodes.innerText = allEpisodes.length; 
+  totalEpisodes.textContent = allEpisodes.length; 
 
   for(let episode of episodes){
     const article = document.createElement("Article");
@@ -40,9 +40,9 @@ function showAllEpisodes(episodes){
 }
 
 search.addEventListener('keyup', e => {
-  const value = e.target.value.toUpperCase();
+  const matchingValue = e.target.value.toUpperCase();
   const matchingEpisodes = allEpisodes.filter((episode)=>{
-        return episode.name.toUpperCase().includes(value) || episode.summary.toUpperCase().includes(value);
+        return episode.name.toUpperCase().includes(matchingValue) || episode.summary.toUpperCase().includes(matchingValue);
     })
 
   matchEpisodes.innerText = matchingEpisodes.length;
