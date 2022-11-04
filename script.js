@@ -1,10 +1,13 @@
 //You can edit ALL of the code here
+ 
+let allEpisodes = [];
+
 function setup() {
   // const allEpisodes = getAllEpisodes();
   // makePageForEpisodes(allEpisodes);
-
-  const allEpisodes = getAllEpisodes();
-  showAllEpisodes(allEpisodes)
+  allEpisodes = getAllEpisodes();
+  showAllEpisodes(allEpisodes);
+  searchEpisode(allEpisodes);
 }
 window.onload = setup;
 
@@ -15,20 +18,17 @@ window.onload = setup;
 
 function showAllEpisodes(episodes){
   const container = document.querySelector(".container");
-
+  //console.log(container)
   for(let episode of episodes){
     const divArticle = document.createElement("Article");
 
     const title = document.createElement("h1");
-    title.style.border = "solid grey";
-    title.style.padding = "10px"
-    title.textContent = `${episode.name} - S0${episode.season}E0${episode.number}`;
-    
+    const formattedEpNumber = ((episode.number.toString()).padStart(2,"0"))// format number to two characters string
+    title.textContent = `${episode.name} - S0${episode.season}E${formattedEpNumber}`;
     divArticle.appendChild(title);
     
     const image = document.createElement("img");
     image.src = episode.image.medium;
-    image.style.width = "auto"
     divArticle.appendChild(image);
 
     const p = document.createElement("p");
@@ -39,13 +39,29 @@ function showAllEpisodes(episodes){
   }
 }
 
+
 function searchEpisode(episodes){
-  const div = document.createElement("div")
+  const search = document.getElementById("search");
+  
+  //console.log(search)
+ 
+  search.addEventListener('keyup', e => {
+  const value = e.target.value;
+  allEpisodes.filter((episode)=>{
+       const isVisible = episode.name.includes(value) || episode.summary.includes(value)
+       //episode.element.classList.toggle("hide",!isVisible)
+   })
+ })
 
-  for(let episode of episodes){
-    const search = document.createComment("input")
-
-    search.appendChild(div)
-  }
+  //divElem.appendChild(search);
+  
 }
+
+// for(let episode of episodes){
+  //    search.textContent = `${episode.name}`
+  // }
+  // const search = document.createElement("input");
+  // search.setAttribute("type","search");
+
+
 
