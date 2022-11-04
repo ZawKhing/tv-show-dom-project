@@ -1,15 +1,13 @@
 //You can edit ALL of the code here
- 
-let allEpisodes = [];
+const search = document.getElementById("search");
+const totalEpisodes = document.getElementById("total-episodes");
+const matchEpisodes = document.getElementById("matching-ep")
+
+let allEpisodes =  getAllEpisodes();
 
 function setup() {
-  // const allEpisodes = getAllEpisodes();
-  // makePageForEpisodes(allEpisodes);
-  allEpisodes = getAllEpisodes();
-  showAllEpisodes(allEpisodes);
-  //searchEpisode(allEpisodes);
+     showAllEpisodes(allEpisodes);
 }
-window.onload = setup;
 
 // function makePageForEpisodes(episodeList) {
 //   const rootElem = document.getElementById("root");
@@ -18,55 +16,37 @@ window.onload = setup;
 
 function showAllEpisodes(episodes){
   const container = document.querySelector(".container");
-  //console.log(container)
-  for(let episode of episodes){
-    const divArticle = document.createElement("Article");
+  container.innerHTML = "";
+  totalEpisodes.innerText = allEpisodes.length; 
 
-    const title = document.createElement("h1");
+  for(let episode of episodes){
+    const article = document.createElement("Article");
+  
+    const title = document.createElement("h2");
     const formattedEpNumber = ((episode.number.toString()).padStart(2,"0"))// format number to two characters string
     title.textContent = `${episode.name} - S0${episode.season}E${formattedEpNumber}`;
-    divArticle.appendChild(title);
+    article.appendChild(title);
     
     const image = document.createElement("img");
     image.src = episode.image.medium;
-    divArticle.appendChild(image);
+    article.appendChild(image);
 
     const p = document.createElement("p");
     p.innerHTML = `${episode.summary}`;
-    divArticle.appendChild(p);
+    article.appendChild(p);
 
-    container.appendChild(divArticle);
+    container.appendChild(article);
   }
 }
 
-
-
-const search = document.getElementById("search");
-  
-  //console.log(search)
- 
-  search.addEventListener('keyup', e => {
-  const value = e.target.value;
+search.addEventListener('keyup', e => {
+  const value = e.target.value.toUpperCase();
   const matchingEpisodes = allEpisodes.filter((episode)=>{
-       const isVisible = episode.name.includes(value) || episode.summary.includes(value)
-       return isVisible;
-       //episode.element.classList.toggle("hide",!isVisible)
-     })
-     showAllEpisodes(matchingEpisodes);
-  })
-// function searchEpisode(episodes){
-  
-//  })
+        return episode.name.toUpperCase().includes(value) || episode.summary.toUpperCase().includes(value);
+    })
 
-//   //divElem.appendChild(search);
-  
-// }
+  matchEpisodes.innerText = matchingEpisodes.length;
+  showAllEpisodes(matchingEpisodes);
+})
 
-// for(let episode of episodes){
-  //    search.textContent = `${episode.name}`
-  // }
-  // const search = document.createElement("input");
-  // search.setAttribute("type","search");
-
-
-
+window.onload = setup;
