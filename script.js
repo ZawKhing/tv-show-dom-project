@@ -7,7 +7,7 @@ const allEpisodes =  getAllEpisodes();
 
 function setup() {
     showAllEpisodes(allEpisodes);
-    populateSelectEpisode(allEpisodes)
+    populateSelectedEpisode(allEpisodes)
 }
 
 // function makePageForEpisodes(episodeList) {
@@ -15,6 +15,7 @@ function setup() {
 //   rootElem.textContent = `Got ${episodeList.length} episode(s)`;
 // }
 
+// show all episodes
 function showAllEpisodes(episodes){
   const container = document.querySelector(".container");
   container.innerHTML = "";
@@ -40,22 +41,24 @@ function showAllEpisodes(episodes){
   }
 }
 
+//search episode
 search.addEventListener('keyup', e => {
   const matchingValue = e.target.value.toUpperCase();
   const matchingEpisodes = allEpisodes.filter((episode)=>{
         return episode.name.toUpperCase().includes(matchingValue) || episode.summary.toUpperCase().includes(matchingValue);
-    })
+  })
 
   matchEpisodes.innerText = matchingEpisodes.length;
   showAllEpisodes(matchingEpisodes);
 })
 
-
-function populateSelectEpisode(episodes){
+//select options
+function populateSelectedEpisode(episodes){
  const select = document.getElementById("episode-list");
 
  for(let episode of episodes){
   const option = document.createElement("option");
+  
   option.setAttribute("value",episode.id);
   let formattedEpNumber = ((episode.number.toString()).padStart(2,"0"))// format number to two characters string
   option.innerText = `S0${episode.season}E${formattedEpNumber} - ${episode.name}`;
@@ -64,11 +67,16 @@ function populateSelectEpisode(episodes){
  }
 }
 
-// select.addEventListener('keyup', e=>{
-//   const selectEpisode = e.target.value;
-//   const selectEp = allEpisodes.filter((episode)=>{
-//         return episode.name;
+//populate selected episode
+// select.addEventListener('change', e => {
+//   const selectedEpisode = e.target.value.slice(9)
+
+  
+//   const selectedEp = allEpisodes.filter((episode)=>{
+//        return episode.name === selectedEpisode;
 //   })
-//   showAllEpisodes(selectEp)
+
+//   showAllEpisodes(selectedEp);
 // })
+
 window.onload = setup;
