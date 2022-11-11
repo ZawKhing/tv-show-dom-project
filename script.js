@@ -1,28 +1,63 @@
 //You can edit ALL of the code here
-
+const container = document.querySelector(".container");
 const search = document.getElementById("search");
 const totalEpisodes = document.getElementById("total-episodes");
-const matchedEpisodes = document.getElementById("matching-ep")
-const allEpisodes =  getAllEpisodes();
+const matchedEpisodes = document.getElementById("matching-ep");
+const showSelector = document.getElementById("show-list");
+const select = document.getElementById("episode-list");
+let allEpisodes;
 
 function setup() {
-    displayEpisodes(allEpisodes);
-    selectEpisodes(allEpisodes)
+  // fetch(url)
+  //   .then(response => response.json())
+  //   .then(result => {
+  //       //console.log(result)
+  //       allEpisodes = result;
+  //       displayEpisodes(result);
+  //       selectEpisodes(result);
+  //   })  
+  const allShows = getAllShows();
+  console.log(allShows)
+  showList(allShows);
 }
 
+//select shows list
+function showList(shows){
+  for(let show of shows){
+     const option = document.createElement("option");
+      option.value = show.id;
+      option.innerText = show.name;
+
+     showSelector.appendChild(option);
+  }
+}
+
+showSelector.addEventListener('change', e => {
+      const selectedShowId = e.target.value;
+      const url = `https://api.tvmaze.com/shows/${selectedShowId}/episodes`;
+      fetch(url)
+      .then(response => response.json())
+      .then(result => {
+        //console.log(result)
+        allEpisodes = result;
+        displayEpisodes(result);
+        selectEpisodes(result);
+    })  
+}) 
 
 //display all episodes
 function displayEpisodes(episodes){
-  const container = document.querySelector(".container");
-  container.innerHTML = "";
+  
   totalEpisodes.textContent = allEpisodes.length; 
+  container.innerHTML = "";
 
   for(let episode of episodes){
     const article = document.createElement("article");
   
     const title = document.createElement("h2");
-    let formattedEpNumber = ((episode.number.toString()).padStart(2,"0"))// format number to two characters string
-    title.textContent = `${episode.name} - S0${episode.season}E${formattedEpNumber}`;
+    const formattedSeasonNumber = ((episode.season.toString()).padStart(2,"0"))
+    const formattedEpisodeNumber = ((episode.number.toString()).padStart(2,"0"))// format number to two characters string
+    title.textContent = `${episode.name} - S${formattedSeasonNumber}E${formattedEpisodeNumber}`;
     article.appendChild(title);
     
     const image = document.createElement("img");
@@ -47,13 +82,15 @@ search.addEventListener('keyup', e => {
   matchedEpisodes.innerText = matchingEpisodes.length;
 })
 
-//select episodes
-const select = document.getElementById("episode-list");
+//select episodes list
 function selectEpisodes(episodes){
+  select.innerHTML= "";
+
    for(let episode of episodes){
       const option = document.createElement("option");
-      const formattedEpNumber = ((episode.number.toString()).padStart(2,"0"))// format number to two characters string
-      const dropdownOption = `S0${episode.season}E${formattedEpNumber} - ${episode.name}`;
+      const formattedSeasonNumber = ((episode.season.toString()).padStart(2,"0"))
+      const formattedEpisodeNumber = ((episode.number.toString()).padStart(2,"0"))// format number to two characters string
+      const dropdownOption = `S${formattedSeasonNumber}E${formattedEpisodeNumber} - ${episode.name}`;
       option.value = dropdownOption;
       option.innerText = dropdownOption;
       
@@ -68,6 +105,6 @@ function selectEpisodes(episodes){
            return episode.name === selectedEpisode;
       }); 
     displayEpisodes(selectedEp);
-})     
-
+}) 
+  
 window.onload = setup();
