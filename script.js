@@ -1,5 +1,6 @@
 //You can edit ALL of the code here
 const container = document.querySelector(".container");
+//const episodeContainer = document.querySelector(".episode-container");
 const search = document.getElementById("search");
 const showSelector = document.getElementById("show-list");
 const allShows = getAllShows();
@@ -7,12 +8,14 @@ let displayEpisodes = [];
 let currentFilterSearch = "";
 let seriesMode = true;
 
+// setup function to load
 function setup() {
   displayShows(allShows);
   showList(allShows);
+  showsListing(allShows);
 }
 
-//display all shows
+//to display all shows
 function displayShows(shows) {
   container.replaceChildren();
 
@@ -75,7 +78,7 @@ function displayShows(shows) {
   }
 }
 
-//select shows lists
+//to select shows lists
 function showList(shows) {
   for (let show of shows) {
     const option = document.createElement("option");
@@ -85,23 +88,60 @@ function showList(shows) {
   }
 }
 
+//to display all episodes for individual show
+function showEpisodes(episodes) {
+  container.replaceChildren();
+
+  const episodeGrid = document.createElement("div");
+  episodeGrid.classList.add("episode-grid");
+
+  for (let episode of episodes) {
+    const article = document.createElement("article");
+    article.classList.add("episode-card");
+
+    const title = document.createElement("h2");
+    const formattedSeasonNumber = episode.season.toString().padStart(2, "0"); // format season number to two characters string
+    const formattedEpisodeNumber = episode.number.toString().padStart(2, "0"); // format episode number to two characters string
+    title.textContent = `${episode.name} - S${formattedSeasonNumber}E${formattedEpisodeNumber}`;
+    article.appendChild(title);
+
+    const image = document.createElement("img");
+    if (episode.image) {
+      image.src = episode.image.medium;
+    } else {
+      image.src = "";
+    }
+    article.appendChild(image);
+
+    const summary = document.createElement("p");
+    summary.innerHTML = `${episode.summary}`;
+    article.appendChild(summary);
+
+    episodeGrid.appendChild(article);
+  }
+  container.appendChild(episodeGrid);
+}
+
+//to get episode for show
 function getEpisodeForShow(showId) {
   const url = `https://api.tvmaze.com/shows/${showId}/episodes`;
   fetch(url)
     .then((response) => response.json())
     .then((result) => {
       displayEpisodes = result;
-      displayShows(result);
+      showEpisodes(result);
+      showsListing();
     });
 }
 
-//display selected shows
+//to display selected shows
 showSelector.addEventListener("change", (e) => {
   const selectedShowId = e.target.value;
   seriesMode = false;
   getEpisodeForShow(selectedShowId);
 });
 
+//to search shows
 search.addEventListener("input", (e) => {
   const currentText = e.target.value;
   if (seriesMode) {
@@ -116,7 +156,16 @@ search.addEventListener("input", (e) => {
         return episode.name.toLowerCase().includes(currentText);
       })
     );
-  };
+  }
 });
+
+// create anchor tag for shows listing
+function showsListing() {
+  const switchShows = document.querySelector(".switch-show");
+  const shows = document.createElement("a");
+  const showsBtn = document.createElement("button");
+  showsBtn.textContent = "Back To Shows";
+  switchShows.appendChild(showsBtn);
+}
 
 window.onload = setup();
