@@ -17,8 +17,8 @@ function setup() {
 //to display all shows
 function displayShows(shows) {
   container.replaceChildren();
-  
-const sortedShow = shows.sort((a,b)=>(a.name > b.name)? 1 : -1);
+
+  const sortedShow = shows.sort((a, b) => (a.name > b.name ? 1 : -1));
 
   for (let show of sortedShow) {
     const article = document.createElement("article");
@@ -151,7 +151,7 @@ search.addEventListener("input", (e) => {
         return (
           show.name.toLowerCase().includes(currentText) ||
           show.summary.toLowerCase().includes(currentText) ||
-          show.genres.map((genre)=> genre.toLowerCase()).includes(currentText)
+          show.genres.map((genre) => genre.toLowerCase()).includes(currentText)
         );
       })
     );
@@ -169,15 +169,14 @@ search.addEventListener("input", (e) => {
 
 // create shows listing
 function showsListing() {
-  
   const switchShows = document.querySelector(".switch-show");
   const shows = document.createElement("a");
   const showsBtn = document.createElement("button");
   showsBtn.textContent = "Back To Shows";
 
   switchShows.addEventListener("click", (e) => {
-      seriesMode = true;
-      displayShows(allShows);
+    seriesMode = true;
+    displayShows(allShows);
   });
 
   switchShows.appendChild(showsBtn);
