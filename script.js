@@ -1,6 +1,5 @@
 //You can edit ALL of the code here
 const container = document.querySelector(".container");
-//const episodeContainer = document.querySelector(".episode-container");
 const search = document.getElementById("search");
 const showSelector = document.getElementById("show-list");
 const allShows = getAllShows();
@@ -18,8 +17,10 @@ function setup() {
 //to display all shows
 function displayShows(shows) {
   container.replaceChildren();
+  
+const sortedShow = shows.sort((a,b)=>(a.name > b.name)? 1 : -1);
 
-  for (let show of shows) {
+  for (let show of sortedShow) {
     const article = document.createElement("article");
     article.classList.add("show-card");
 
@@ -130,7 +131,6 @@ function getEpisodeForShow(showId) {
     .then((result) => {
       displayEpisodes = result;
       showEpisodes(result);
-      showsListing();
     });
 }
 
@@ -143,28 +143,43 @@ showSelector.addEventListener("change", (e) => {
 
 //to search shows
 search.addEventListener("input", (e) => {
-  const currentText = e.target.value;
+  const currentText = e.target.value.toLowerCase();
+
   if (seriesMode) {
     displayShows(
       allShows.filter((show) => {
-        return show.name.toLowerCase().includes(currentText);
+        return (
+          show.name.toLowerCase().includes(currentText) ||
+          show.summary.toLowerCase().includes(currentText) ||
+          show.genres.map((genre)=> genre.toLowerCase()).includes(currentText)
+        );
       })
     );
   } else {
-    displayShows(
+    showEpisodes(
       displayEpisodes.filter((episode) => {
-        return episode.name.toLowerCase().includes(currentText);
+        return (
+          episode.name.toLowerCase().includes(currentText) ||
+          episode.summary.toLowerCase().includes(currentText)
+        );
       })
     );
   }
 });
 
-// create anchor tag for shows listing
+// create shows listing
 function showsListing() {
+  
   const switchShows = document.querySelector(".switch-show");
   const shows = document.createElement("a");
   const showsBtn = document.createElement("button");
   showsBtn.textContent = "Back To Shows";
+
+  switchShows.addEventListener("click", (e) => {
+      seriesMode = true;
+      displayShows(allShows);
+  });
+
   switchShows.appendChild(showsBtn);
 }
 
