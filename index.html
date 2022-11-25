@@ -3,18 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TV Show Project | My Name (My GitHub username)</title>
+    <title>TV Show Project | Zaw (zkhing)</title>
     <link href="style.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
-    <div id="root">
+    <!-- <div id="root"> </div> -->
+    <div class="wrapper">
+       <select id="show-list"></select>
+       <input id="search">
+       <div class="switch-show"> </div>
+      <!-- <select id="episode-list"></select>   
+      <p id="span"><span id="matching-ep"></span> Displaying / <span id="total-episodes"></span> Episodes</p> -->
+    </div>
+    
+
+    <div class="container">   </div>
+    
+    <!-- credit to tvmaze -->
+    <div class="reference">
+      <a href="https://www.tvmaze.com/">These data are from TVMaze.com used for eductaional purpose only.</a>
     </div>
 
+    <script src="shows.js"></script>
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
-
     <!-- Loads YOUR javascript code -->
     <script src="script.js"></script>
   </body>
